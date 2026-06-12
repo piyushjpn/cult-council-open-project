@@ -1,0 +1,60 @@
+import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# --- Page Configuration ---
+st.set_page_config(page_title="NIFTY-50 AI Platform", layout="wide")
+st.title("📈 NIFTY-50 Investment Intelligence Platform")
+st.markdown("An AI-powered decision support system utilizing Modern Portfolio Theory.")
+
+# --- Static Data (From our MPT Analysis) ---
+portfolios = {
+    "Conservative": {
+        "return": "11.76%", "risk": "25.32%",
+        "allocations": {"NTPC": 24.25, "MARUTI": 22.07, "RELIANCE": 19.13, "ONGC": 17.83, "SBIN": 16.72}
+    },
+    "Balanced": {
+        "return": "11.56%", "risk": "25.83%",
+        "allocations": {"NTPC": 20.0, "MARUTI": 20.0, "RELIANCE": 20.0, "ONGC": 20.0, "SBIN": 20.0}
+    },
+    "Aggressive": {
+        "return": "17.18%", "risk": "27.15%",
+        "allocations": {"MARUTI": 38.83, "RELIANCE": 27.55, "SBIN": 22.73, "NTPC": 10.89, "ONGC": 0.0}
+    }
+}
+
+# --- Sidebar Controls ---
+st.sidebar.header("Investor Profile Settings")
+st.sidebar.write("Select a risk tolerance profile to dynamically adjust the portfolio allocation.")
+selected_profile = st.sidebar.selectbox("Select Risk Profile:", ["Conservative", "Balanced", "Aggressive"])
+
+# --- Main Dashboard ---
+col1, col2 = st.columns(2)
+profile_data = portfolios[selected_profile]
+
+with col1:
+    st.metric(label="Expected Annual Return", value=profile_data["return"])
+with col2:
+    st.metric(label="Portfolio Volatility (Risk)", value=profile_data["risk"])
+
+st.divider()
+
+# --- Charting the Allocation ---
+st.subheader(f"{selected_profile} Portfolio Allocation")
+alloc_data = pd.DataFrame({
+    "Stock": list(profile_data["allocations"].keys()),
+    "Allocation (%)": list(profile_data["allocations"].values())
+})
+
+# Create a donut chart using Matplotlib
+fig, ax = plt.subplots(figsize=(8, 4))
+ax.pie(alloc_data["Allocation (%)"], labels=alloc_data["Stock"], autopct='%1.1f%%', startangle=90, 
+       wedgeprops={'width': 0.4}, colors=['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'])
+ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+st.pyplot(fig)
+
+# --- Sector Insights ---
+st.divider()
+st.subheader("💡 Macro-Market Insights (2000-2021)")
+st.info("**Top Risk-Adjusted Sector:** Cement & Cement Products (Sharpe: 0.53, Return: 26.09%)")
+st.info("**Lowest Risk Sector:** Consumer Goods (Volatility: 37.28%)")
