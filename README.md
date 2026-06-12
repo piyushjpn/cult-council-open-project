@@ -14,3 +14,14 @@ This repository contains the source code for an AI-powered investment intelligen
 3. Install the required dependencies:
    ```bash
    pip install pandas numpy scikit-learn matplotlib
+
+## Data Source
+The historical stock market data used in this project is the **NIFTY-50 dataset**. Due to GitHub's file size limits and best practices, the massive master dataset is not hosted directly in this repository.
+
+Please download the `NIFTY50_all.csv` file directly from Kaggle:
+👉 **[Download NIFTY-50 Stock Market Data Here](https://www.kaggle.com/datasets/rohanrao/nifty50-stock-market-data/data)**
+
+**Setup Instructions:**
+1. Download the archive from the Kaggle link above.
+2. Extract the ZIP file.
+3. Move the `NIFTY50_all.csv` file into the root directory of this project alongside `main.py` and `stock_metadata.csv`.
